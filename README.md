@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Club Workspace 🌱</title>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
 </head>
@@ -16,7 +15,7 @@
     <div class="login-box">
       <div class="login-logo">
         <div class="logo-char">🌱</div>
-        <h1>VolunteerWorld</h1>
+        <h1>Club Workspace</h1>
         <p class="subtitle">Your team's pixel playground</p>
       </div>
       <div class="login-form">
