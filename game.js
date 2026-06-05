@@ -10,83 +10,122 @@
 const STATE = {
   playerName: "",
   playerColor: "#FF6B6B",
+  playerCharType: 0,          // index into CHAR_TYPES
   playerX: 400,
-  playerY: 320,
-  playerDir: 1, // 1 = right, -1 = left
+  playerY: 290,
+  playerDir: 1,
   playerAnim: 0,
   playerFrame: 0,
   chatMessage: "",
   chatTimer: 0,
   keys: {},
-  // simulated team members (stored in localStorage as "other players")
   others: [],
-  activeMeet: null, // hub id currently with a live meet
-  meetLinks: {},    // hubId -> link
+  meetLinks: {},
+  hoveredHub: null,
+  nearHub: null,              // hub player is physically near
 };
- 
-// ─── Hub Definitions ───────────────────────────────────────────────────
+
+// ─── Hub Definitions  (7 FTU teams + 1 main space) ────────────────────
 const HUBS = [
   {
     id: "main",
-    name: "Main Plaza",
-    desc: "Open space for the whole team — create a new meeting anytime!",
-    x: 320, y: 200,
-    w: 130, h: 100,
+    name: "Study Space FTU",
+    desc: "Không gian chung cho cả nhóm — mở meeting bất cứ lúc nào!",
+    x: 310, y: 195,
+    w: 155, h: 105,
     color: "#3fb950",
     icon: "🏛️",
     type: "open",
   },
   {
-    id: "strategy",
-    name: "Strategy Room",
-    desc: "Plan campaigns, set goals, discuss team roadmap.",
-    x: 100, y: 110,
-    w: 110, h: 80,
+    id: "to_chuc",
+    name: "Mảng Tổ chức",
+    desc: "Lên kế hoạch, phân công nhiệm vụ & điều phối sự kiện.",
+    x: 90, y: 95,
+    w: 120, h: 85,
     color: "#58a6ff",
     icon: "📋",
     type: "hub",
   },
   {
-    id: "creative",
-    name: "Creative Studio",
-    desc: "Design posters, social media content, visual assets.",
-    x: 580, y: 110,
-    w: 110, h: 80,
+    id: "truyen_thong",
+    name: "Mảng Truyền thông",
+    desc: "Nội dung mạng xã hội, bài viết & chiến dịch truyền thông.",
+    x: 565, y: 95,
+    w: 135, h: 85,
     color: "#d29922",
+    icon: "📢",
+    type: "hub",
+  },
+  {
+    id: "doi_noi",
+    name: "Mảng Đối nội",
+    desc: "Chăm sóc thành viên, nội bộ nhóm & tinh thần đội ngũ.",
+    x: 90, y: 335,
+    w: 120, h: 85,
+    color: "#f85149",
+    icon: "🤝",
+    type: "hub",
+  },
+  {
+    id: "van_nghe",
+    name: "Mảng Văn nghệ",
+    desc: "Tiết mục văn nghệ, biểu diễn & sáng tạo nghệ thuật.",
+    x: 565, y: 335,
+    w: 135, h: 85,
+    color: "#FF9FF3",
+    icon: "🎭",
+    type: "hub",
+  },
+  {
+    id: "trang_tri",
+    name: "Mảng Trang trí",
+    desc: "Thiết kế không gian, backdrop & trang trí sự kiện.",
+    x: 90, y: 215,
+    w: 120, h: 80,
+    color: "#96CEB4",
     icon: "🎨",
     type: "hub",
   },
   {
-    id: "logistics",
-    name: "Logistics HQ",
-    desc: "Coordinate events, schedules & volunteer assignments.",
-    x: 100, y: 360,
-    w: 110, h: 80,
-    color: "#f85149",
-    icon: "📦",
+    id: "gay_quy",
+    name: "Mảng Gây quỹ",
+    desc: "Chiến dịch gây quỹ, kêu gọi đóng góp & quản lý ngân sách.",
+    x: 565, y: 215,
+    w: 135, h: 80,
+    color: "#DDA0DD",
+    icon: "💰",
     type: "hub",
   },
   {
-    id: "comms",
-    name: "Comms Centre",
-    desc: "Media outreach, newsletters & community updates.",
-    x: 580, y: 360,
-    w: 110, h: 80,
-    color: "#DDA0DD",
+    id: "tt_gay_quy",
+    name: "TT Gây quỹ",
+    desc: "Truyền thông cho chiến dịch gây quỹ & lan toả thông điệp.",
+    x: 310, y: 390,
+    w: 155, h: 80,
+    color: "#F0A500",
     icon: "📡",
     type: "hub",
   },
-  {
-    id: "lounge",
-    name: "Chill Lounge",
-    desc: "Relax, chat informally — no agenda required! 🍵",
-    x: 340, y: 400,
-    w: 100, h: 75,
-    color: "#96CEB4",
-    icon: "🛋️",
-    type: "hub",
-  },
 ];
+
+// ─── Character Types  (matching the reference sprite sheet styles) ──────
+// Each type is a set of drawing instructions for the pixel char renderer
+const CHAR_TYPES = [
+  { label: "Warrior",   bodyColor: "#cc3333", helmetColor: "#888", accentColor: "#cc3333" },
+  { label: "Wizard",    bodyColor: "#3355cc", helmetColor: "#222266", accentColor: "#ccaa00" },
+  { label: "Archer",    bodyColor: "#3a8c2f", helmetColor: "#2a6020", accentColor: "#cc9900" },
+  { label: "Knight",    bodyColor: "#778899", helmetColor: "#556677", accentColor: "#aabbcc" },
+  { label: "Robot",     bodyColor: "#667788", helmetColor: "#445566", accentColor: "#00ccff" },
+  { label: "Princess",  bodyColor: "#ff80b0", helmetColor: "#ffcc00", accentColor: "#ff40a0" },
+  { label: "Viking",    bodyColor: "#4455aa", helmetColor: "#887755", accentColor: "#cc8800" },
+  { label: "Ninja",     bodyColor: "#222222", helmetColor: "#111111", accentColor: "#cc0000" },
+  { label: "Alien",     bodyColor: "#44bb44", helmetColor: "#228822", accentColor: "#00ffaa" },
+  { label: "Astronaut", bodyColor: "#dddddd", helmetColor: "#bbbbbb", accentColor: "#4499ff" },
+  { label: "Punk",      bodyColor: "#334499", helmetColor: "#ff44aa", accentColor: "#22ccff" },
+  { label: "Dragon",    bodyColor: "#cc4400", helmetColor: "#882200", accentColor: "#ff8800" },
+];
+
  
 // ─── Canvas Setup ──────────────────────────────────────────────────────
 const worldCanvas = document.getElementById("world-canvas");
