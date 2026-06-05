@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Study Space FTU 🌱</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Space FTU 🌱</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -118,13 +118,17 @@
         <span id="modal-active-users"></span>
       </div>
       <div class="modal-actions">
-        <button class="pixel-btn primary large" id="create-meet-btn">📹 Tạo &amp; Tham gia Meet</button>
+        <!-- FIX: Input field for real Google Meet link -->
+        <div class="meet-link-input-row">
+          <input type="text" id="meet-link-input" placeholder="https://meet.google.com/xxx-xxx-xxx" />
+        </div>
+        <button class="pixel-btn primary large" id="create-meet-btn">📹 Tạo & Tham gia Meet</button>
         <button class="pixel-btn secondary" id="copy-link-btn">🔗 Copy Link</button>
       </div>
       <div class="meet-link-box hidden" id="meet-link-box">
         <p>Google Meet link của bạn:</p>
         <a id="meet-link-a" href="#" target="_blank" class="meet-link-text"></a>
-        <div class="pixel-note">Link tự mở sau 3s...</div>
+        <div class="pixel-note">Click link để vào meeting</div>
       </div>
       <button class="pixel-btn danger small modal-close" id="modal-close-btn">✖ Đóng</button>
     </div>
