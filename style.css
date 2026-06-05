@@ -1,29 +1,27 @@
 /* ─── Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
 :root {
   --pixel: 4px;
   --bg-dark: #0d1117;
-  --bg-mid:  #161b22;
+  --bg-mid: #161b22;
   --bg-surf: #21262d;
-  --border:  #30363d;
-  --green:   #3fb950;
-  --teal:    #39d353;
-  --blue:    #58a6ff;
-  --yellow:  #d29922;
-  --red:     #f85149;
-  --text:    #e6edf3;
-  --muted:   #8b949e;
-  --grass:   #2d6a1f;
+  --border: #30363d;
+  --green: #3fb950;
+  --teal: #39d353;
+  --blue: #58a6ff;
+  --yellow: #d29922;
+  --red: #f85149;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --grass: #2d6a1f;
   --grass-l: #3a8b28;
-  --path:    #c9a96e;
-  --path-d:  #b8925a;
-  --water:   #1e5a7a;
+  --path: #c9a96e;
+  --path-d: #b8925a;
+  --water: #1e5a7a;
   --water-l: #2171a3;
   --pixel-font: 'Press Start 2P', monospace;
   --vt-font: 'VT323', monospace;
 }
- 
 html, body {
   width: 100%; height: 100%;
   overflow: hidden;
@@ -33,14 +31,12 @@ html, body {
   font-size: 18px;
   image-rendering: pixelated;
 }
- 
 /* ─── Screens ──────────────────────────────────────────────── */
 .screen {
   position: fixed; inset: 0;
   display: none;
 }
 .screen.active { display: flex; }
- 
 /* ─── Login Screen ─────────────────────────────────────────── */
 .login-bg {
   width: 100%; height: 100%;
@@ -51,7 +47,6 @@ html, body {
   position: relative;
   overflow: hidden;
 }
- 
 .pixel-stars {
   position: absolute; inset: 0;
   pointer-events: none;
@@ -65,9 +60,8 @@ html, body {
 }
 @keyframes twinkle {
   from { opacity: 0.2; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
- 
 .login-box {
   background: rgba(13,17,23,0.92);
   border: 3px solid var(--green);
@@ -77,7 +71,6 @@ html, body {
   z-index: 2;
   image-rendering: pixelated;
 }
- 
 .login-logo {
   text-align: center;
   margin-bottom: 1.8rem;
@@ -89,7 +82,7 @@ html, body {
 }
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-6px); }
+  50% { transform: translateY(-6px); }
 }
 .login-logo h1 {
   font-family: var(--pixel-font);
@@ -103,7 +96,6 @@ html, body {
   font-size: 1.2rem;
   color: var(--muted);
 }
- 
 .login-form label {
   display: block;
   font-family: var(--pixel-font);
@@ -114,7 +106,6 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
- 
 .login-form input[type="text"] {
   width: 100%;
   padding: 10px 12px;
@@ -127,7 +118,62 @@ html, body {
   transition: border-color 0.15s;
 }
 .login-form input:focus { border-color: var(--green); }
- 
+/* ─── FIX: Character Grid ──────────────────────────────── */
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 6px;
+}
+.char-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
+  background: rgba(22, 27, 34, 0.6);
+}
+.char-item:hover {
+  border-color: var(--muted);
+  background: rgba(33, 38, 45, 0.8);
+  transform: scale(1.08);
+}
+.char-item.selected {
+  border-color: var(--green);
+  background: rgba(63, 185, 80, 0.12);
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.2);
+}
+.char-item canvas {
+  image-rendering: pixelated;
+}
+.char-label {
+  font-family: var(--pixel-font);
+  font-size: 5px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.char-item.selected .char-label {
+  color: var(--green);
+}
+/* ─── FIX: Character Preview Row ───────────────────────── */
+.char-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+.char-preview-hint {
+  font-family: var(--pixel-font);
+  font-size: 7px;
+  color: var(--muted);
+}
 .color-picker {
   display: flex; gap: 10px; flex-wrap: wrap;
   margin-top: 8px;
@@ -144,7 +190,6 @@ html, body {
   border-color: white;
   box-shadow: 0 0 0 1px #0d1117;
 }
- 
 .deco-chars {
   position: absolute; bottom: 40px;
   display: flex; gap: 40px;
@@ -156,7 +201,6 @@ html, body {
   width: 64px; height: 96px;
   animation: bob var(--bd, 1.5s) ease-in-out infinite;
 }
- 
 /* ─── Pixel Buttons ────────────────────────────────────────── */
 .pixel-btn {
   font-family: var(--pixel-font);
@@ -170,45 +214,37 @@ html, body {
   image-rendering: pixelated;
 }
 .pixel-btn:active { transform: scale(0.96); }
- 
 .pixel-btn.primary {
   color: var(--green);
   border-color: var(--green);
 }
 .pixel-btn.primary:hover { background: rgba(63,185,80,0.15); }
- 
 .pixel-btn.secondary {
   color: var(--blue);
   border-color: var(--blue);
 }
 .pixel-btn.secondary:hover { background: rgba(88,166,255,0.15); }
- 
 .pixel-btn.danger {
   color: var(--red);
   border-color: var(--red);
 }
 .pixel-btn.danger:hover { background: rgba(248,81,73,0.15); }
- 
 .pixel-btn.green {
   color: #3fb950;
   border-color: #3fb950;
   font-size: 8px;
 }
 .pixel-btn.green:hover { background: rgba(63,185,80,0.2); }
- 
 .pixel-btn.small { font-size: 7px; padding: 6px 10px; }
 .pixel-btn.large { font-size: 11px; padding: 14px 24px; width: 100%; margin-bottom: 10px; }
- 
 .pixel-btn#join-btn {
   margin-top: 1.5rem;
   width: 100%;
 }
- 
 /* ─── HUD ──────────────────────────────────────────────────── */
 #game-screen {
   flex-direction: column;
 }
- 
 .hud {
   display: flex;
   align-items: center;
@@ -246,7 +282,6 @@ html, body {
   font-size: 1rem;
   color: var(--green);
 }
- 
 /* ─── World Canvas ─────────────────────────────────────────── */
 .world-container {
   position: relative;
@@ -259,7 +294,6 @@ html, body {
   image-rendering: crisp-edges;
   cursor: crosshair;
 }
- 
 /* ─── Hub Tooltip ──────────────────────────────────────────── */
 .hub-tooltip {
   position: absolute;
@@ -291,8 +325,38 @@ html, body {
   min-height: 16px;
 }
 .status-online { color: var(--green); }
-.status-empty  { color: var(--muted); }
- 
+.status-empty { color: var(--muted); }
+/* ─── FIX: Proximity Panel ──────────────────────────────── */
+.proximity-panel {
+  position: absolute;
+  bottom: 60px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13,17,23,0.95);
+  border: 2px solid var(--green);
+  padding: 12px 16px;
+  min-width: 240px;
+  max-width: 320px;
+  z-index: 40;
+  text-align: center;
+}
+.proximity-panel.hidden { display: none; }
+.prox-title {
+  font-family: var(--pixel-font);
+  font-size: 9px;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+.prox-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.prox-status {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
 /* ─── Online Panel ─────────────────────────────────────────── */
 .online-panel {
   position: absolute;
@@ -327,13 +391,12 @@ html, body {
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
+  50% { opacity: 0.3; }
 }
 .online-entry canvas {
   width: 16px; height: 24px;
   image-rendering: pixelated;
 }
- 
 /* ─── Modal ────────────────────────────────────────────────── */
 .modal-overlay {
   position: absolute; inset: 0;
@@ -382,6 +445,23 @@ html, body {
   min-height: 36px;
 }
 .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+/* ─── FIX: Meet link input in modal ────────────────────── */
+.meet-link-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.meet-link-input-row input {
+  flex: 1;
+  padding: 8px 10px;
+  background: var(--bg-mid);
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-family: var(--vt-font);
+  font-size: 1rem;
+  outline: none;
+}
+.meet-link-input-row input:focus { border-color: var(--green); }
 .meet-link-box {
   margin-top: 14px;
   padding: 12px;
@@ -406,13 +486,11 @@ html, body {
   color: var(--muted);
 }
 .meet-link-box.hidden { display: none; }
- 
 .modal-close {
   display: block;
   margin-top: 16px;
   width: 100%;
 }
- 
 /* ─── Chat ─────────────────────────────────────────────────── */
 .chat-input-bar {
   display: flex;
@@ -434,7 +512,6 @@ html, body {
   outline: none;
 }
 .chat-input-bar input:focus { border-color: var(--green); }
- 
 #chat-layer {
   position: absolute; inset: 0;
   pointer-events: none;
@@ -465,9 +542,22 @@ html, body {
 }
 @keyframes bubble-in {
   from { opacity: 0; transform: translateY(-4px) scale(0.9); }
-  to   { opacity: 1; transform: none; }
+  to { opacity: 1; transform: none; }
 }
- 
+/* ─── FIX: Controls Hint ───────────────────────────────── */
+.controls-hint {
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--pixel-font);
+  font-size: 6px;
+  color: var(--muted);
+  display: flex; gap: 6px;
+  z-index: 30;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.hint-sep { color: var(--border); }
 /* ─── Mobile D-Pad ─────────────────────────────────────────── */
 .mobile-controls {
   display: none;
@@ -497,9 +587,7 @@ html, body {
 }
 .dpad-btn:active { background: var(--bg-surf); transform: scale(0.95); }
 .center-btn { background: rgba(63,185,80,0.15); border-color: var(--green); }
- 
 /* ─── Scrollbar ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-dark); }
 ::-webkit-scrollbar-thumb { background: var(--border); }
- 
